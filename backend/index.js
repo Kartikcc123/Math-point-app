@@ -21,10 +21,21 @@ const allowedOrigins = (process.env.CORS_ORIGIN || '')
 const defaultOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:4173',
   'http://127.0.0.1:5173',
   'http://127.0.0.1:5174',
+  'http://127.0.0.1:5175',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:4173',
   'https://math-point-app.onrender.com',
   'https://mathspoint-client.onrender.com',
+  'https://mathspoint-app.onrender.com',
+  'https://mathspoint.onrender.com',
+  'capacitor://localhost',
+  'http://localhost',
 ];
 
 const effectiveOrigins = allowedOrigins.length === 0 ? defaultOrigins : [...new Set([...allowedOrigins, ...defaultOrigins])];
@@ -32,14 +43,20 @@ const effectiveOrigins = allowedOrigins.length === 0 ? defaultOrigins : [...new 
 const corsOptions = {
   origin(origin, callback) {
     // Allow tools like Postman and same-origin server requests.
-    if (!origin) {
+    if (!origin || effectiveOrigins.includes('*')) {
       return callback(null, true);
     }
 
-    return callback(null, effectiveOrigins.includes(origin));
+    if (effectiveOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Check for wildcard matches or patterns if needed, but for now just check inclusion
+    return callback(null, false);
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Session-Token', 'idempotency-key'],
 };
 
 const apiLimiter = rateLimit({
@@ -79,14 +96,6 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 app.use(cors(corsOptions));
-// Handle preflight (OPTIONS) requests via middleware to avoid registering
-// a route with the literal '*' path which some path parsers reject.
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    return cors(corsOptions)(req, res, next);
-  }
-  return next();
-});
 app.use(express.json());
 app.use(requireJsonBody);
 app.use(attachRequestContext);
