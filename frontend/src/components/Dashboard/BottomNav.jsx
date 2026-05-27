@@ -121,9 +121,9 @@ const BottomNav = ({ variant = 'student' }) => {
   const location = useLocation();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 md:hidden" aria-label="Mobile bottom navigation">
+    <nav className="pointer-events-none fixed inset-x-0 bottom-0 z-40 md:hidden" aria-label="Mobile bottom navigation">
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white/96 to-transparent" />
-      <div className="relative mx-auto max-w-md px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] pt-2">
+      <div className="pointer-events-auto relative mx-auto max-w-md px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] pt-2">
         <div className="rounded-[30px] border border-white/80 bg-white/92 p-1.5 shadow-[0_20px_60px_-26px_rgba(15,23,42,0.75)] ring-1 ring-slate-900/5 backdrop-blur-2xl">
           <div className={`grid gap-1 ${items.length === 3 ? 'grid-cols-3' : items.length === 4 ? 'grid-cols-4' : 'grid-cols-5'}`}>
             {items.map(({ label, path, icon: Icon }) => {

@@ -14,6 +14,8 @@ import TeacherLogin from './pages/Public/TeacherLogin';
 import Register from './pages/Public/Register';
 import Checkout from './pages/Public/Checkout';
 import AdminLogin from './pages/Public/AdminLogin';
+import PrivacyPolicy from './pages/Public/PrivacyPolicy';
+import TermsAndConditions from './pages/Public/TermsAndConditions';
 
 // Private Pages
 import AdminDashboard from './pages/Admin/Dashboard';
@@ -69,13 +71,15 @@ function App() {
           <Route path="faculties" element={<Faculties />} />
           <Route path="contact" element={<Contact />} />
           <Route path="free-study-materials" element={<FreeStudyMaterials />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="checkout/:courseId" element={<Checkout />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/parent-login" element={<ParentLogin />} />
         <Route path="/teacher-portal-7f4b2k1m" element={<TeacherLogin />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/mathspoint-secure-admin-4k9p7x2q" element={<AdminLogin />} />
+        <Route path="/portal-8a9d3f2c" element={<AdminLogin />} />
         {/* Admin Panel Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />

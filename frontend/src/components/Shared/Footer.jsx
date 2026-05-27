@@ -6,7 +6,7 @@ import BrandLogo from './BrandLogo';
 
 const Footer = () => {
   return (
-    <footer className="border-t border-amber-300/10 bg-zinc-950 py-12 text-stone-300">
+    <footer className="border-t border-amber-300/10 bg-zinc-950 py-12 pb-32 text-stone-300 md:pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="col-span-1 space-y-4 md:col-span-1">
@@ -30,7 +30,9 @@ const Footer = () => {
               <li><Link to="/courses" className="transition hover:text-sky-400">Courses</Link></li>
               <li><Link to="/faculties" className="transition hover:text-sky-400">Our Faculties</Link></li>
               <li><Link to="/contact" className="transition hover:text-sky-400">Contact Us</Link></li>
-              <li><Link to="/login" className="transition hover:text-sky-400">Student Portal</Link></li>
+              {/* <li><Link to="/privacy-policy" className="transition hover:text-sky-400">Privacy Policy</Link></li>
+              <li><Link to="/terms-and-conditions" className="transition hover:text-sky-400">Terms & Conditions</Link></li>
+              <li><Link to="/login" className="transition hover:text-sky-400">Student Portal</Link></li> */}
             </ul>
           </div>
 
@@ -43,11 +45,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 shrink-0 text-sky-400" />
-                <span className="text-sm">+91 9413669776</span>
+                <span className="text-sm">+91 97851 38220</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 shrink-0 text-sky-400" />
-                <span className="text-sm">jay001amera@gmail.com</span>
+                <span className="text-sm">mathspoint2015@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -69,7 +71,22 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 border-t border-slate-800 pt-8 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} MathsPoint Institute. All rights reserved.</p>
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6">
+            <p>&copy; {new Date().getFullYear()} MathsPoint Institute. All rights reserved.</p>
+            <Link to="/privacy-policy" className="font-medium text-stone-300 transition hover:text-sky-400">Privacy Policy</Link>
+            <Link to="/terms-and-conditions" className="font-medium text-stone-300 transition hover:text-sky-400">Terms & Conditions</Link>
+          </div>
+          <p className="mt-4">
+            Designed and Developed by{' '}
+            <a
+              href="https://www.kartikagarwal.in.net"
+              className="font-medium text-sky-400 transition hover:text-sky-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Kartik Agarwal and Ashish Sharma
+            </a>
+          </p>
         </div>
       </div>
     </footer>

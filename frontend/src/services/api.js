@@ -1,15 +1,27 @@
 import axios from 'axios';
 
-// Ensure the base URL is clean and points to the correct backend
-const getBaseURL = () => {
-  const envUrl = import.meta.env.VITE_API_BASE_URL;
-  if (envUrl) return envUrl;
-
-  // Default to production Render URL if not specified
-  return 'https://math-point-app.onrender.com/api';
+// Ensure the base URL always targets the backend API root.
+const normalizeApiBaseURL = (url) => {
+  const cleanedUrl = String(url || '').trim().replace(/\/+$/, '');
+  if (!cleanedUrl) return '';
+  return cleanedUrl.endsWith('/api') ? cleanedUrl : `${cleanedUrl}/api`;
 };
 
-export const API_BASE_URL = getBaseURL();
+const getBaseURL = () => {
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+  if (envUrl) return normalizeApiBaseURL(envUrl);
+
+  // In production builds, use the absolute Render URL.
+  // In dev, use a relative path so Vite's proxy handles CORS.
+  if (import.meta.env.PROD) {
+    return normalizeApiBaseURL('https://mathspoint-yqnv.onrender.com');
+  }
+  return '/api';
+};
+
+export const API_BASE_URL = import.meta.env.PROD
+  ? getBaseURL()
+  : (import.meta.env.VITE_API_BASE_URL ? normalizeApiBaseURL(import.meta.env.VITE_API_BASE_URL) : 'https://mathspoint-yqnv.onrender.com/api');
 
 const api = axios.create({
   baseURL: API_BASE_URL,

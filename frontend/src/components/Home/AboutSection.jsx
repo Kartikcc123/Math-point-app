@@ -10,12 +10,13 @@ import {
   Sparkles,
   Video,
 } from 'lucide-react';
+import mentorImage from '../../assets/Mentor.png';
+import studentImage from '../../assets/Student.jpeg';
 
-const mentorImage =
-  'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=2070&auto=format&fit=crop';
-
-const studentImage =
-  'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1974&auto=format&fit=crop';
+const mentorImageClass =
+  'h-full w-full object-cover object-[center_18%] scale-[1.32]';
+const studentImageClass =
+  'h-full w-full object-cover object-[center_16%] scale-[1.34]';
 
 const stats = [
   {
@@ -74,7 +75,7 @@ const AboutSection = () => {
                   decoding="async"
                   width={224}
                   height={224}
-                  className="h-48 w-full object-cover object-top"
+                  className={`h-48 transition-transform duration-500 ${mentorImageClass}`}
                 />
               </div>
 
@@ -87,7 +88,7 @@ const AboutSection = () => {
                     decoding="async"
                     width={144}
                     height={144}
-                    className="h-24 w-full object-cover object-top"
+                    className={`h-24 transition-transform duration-500 ${studentImageClass}`}
                   />
                 </div>
 
@@ -192,7 +193,7 @@ const AboutSection = () => {
 
             <div className="absolute left-5 top-6 z-20 max-w-[178px] rounded-2xl border border-slate-100 bg-white/95 px-3 py-2 text-left shadow-lg backdrop-blur">
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-sky-700">Student Question</p>
-              <p className="mt-1 text-xs font-bold text-slate-800">How can I score 100/100?</p>
+              <p className="mt-1 text-xs font-bold text-slate-800">How can I score 93/100?</p>
             </div>
 
             <div className="absolute bottom-6 right-4 z-30 max-w-[210px] rounded-2xl bg-slate-950 px-4 py-3 text-left text-white shadow-xl sm:right-8">
@@ -208,7 +209,7 @@ const AboutSection = () => {
               decoding="async"
               width={224}
               height={224}
-              className="absolute left-[22%] top-[47%] z-20 h-40 w-40 -translate-y-1/2 rounded-full border-4 border-white bg-sky-50 object-cover object-top shadow-2xl sm:left-[28%] sm:h-56 sm:w-56 lg:left-[34%]"
+              className={`absolute left-[22%] top-[47%] z-20 h-40 w-40 -translate-y-1/2 rounded-full border-4 border-white bg-sky-50 shadow-2xl sm:left-[28%] sm:h-56 sm:w-56 lg:left-[34%] ${mentorImageClass}`}
             />
 
             <img
@@ -218,7 +219,7 @@ const AboutSection = () => {
               decoding="async"
               width={144}
               height={144}
-              className="absolute right-5 top-[23%] z-10 h-24 w-24 rounded-full border-4 border-white bg-pink-50 object-cover object-top shadow-xl sm:right-14 sm:h-36 sm:w-36"
+              className={`absolute right-5 top-[23%] z-10 h-24 w-24 rounded-full border-4 border-white bg-pink-50 shadow-xl sm:right-14 sm:h-36 sm:w-36 ${studentImageClass}`}
             />
           </div>
         </div>

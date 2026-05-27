@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Award, BookOpenCheck, Sparkles } from 'lucide-react';
 import { buildSrcSet } from '../../utils/image';
@@ -6,15 +6,34 @@ import { buildSrcSet } from '../../utils/image';
 import deepakImg from '../../assets/Deepak.jpeg';
 import mansiImg from '../../assets/Mansi.jpeg';
 import ashishImg from '../../assets/DirectorCutout.png';
+import akankshaImg from '../../assets/Akanksha.jpeg';
+import samdaniImg from '../../assets/Samdani.png';
+import shrutiImg from '../../assets/Shruuti.jpeg';
 
 const faculties = [
   { 
     name: "Ashish Upadhyay", 
     subject: "Mathematics", 
-    exp: "21 Years", 
+    exp: "12 Years", 
     tag: "Director",
     desc: "Visionary leader and senior faculty, driving academic excellence and disciplined mentoring for over two decades.",
     img: ashishImg
+  },
+  { 
+    name: "Deepak Sharma", 
+    subject: "Physics", 
+    exp: "10 Years", 
+    tag: "Physics Expert",
+    desc: "Master of Physics concepts, dedicated to simplifying complex theories for exam readiness.",
+    img: deepakImg 
+  },
+  { 
+    name: "Akanksha Gautam", 
+    subject: "Biology", 
+    exp: "9 Years", 
+    tag: "Biology Expert",
+    desc: "Specialized in Biology, helping students build strong fundamentals and exam confidence.",
+    img: akankshaImg
   },
   { 
     name: "Mansi Acharya", 
@@ -25,16 +44,80 @@ const faculties = [
     img: mansiImg
   },
   { 
-    name: "Deepak Sharma", 
-    subject: "Physics", 
-    exp: "10 Years", 
-    tag: "Physics Expert",
-    desc: "Master of Physics concepts, dedicated to simplifying complex theories for exam readiness.",
-    img: deepakImg 
+    name: "CA Sudeep Samdani", 
+    subject: "Accountancy", 
+    exp: "Experienced", 
+    tag: "Accountancy Expert",
+    desc: "Builds strong accountancy fundamentals through practical learning and clear concept-based teaching.",
+    img: samdaniImg
+  },
+  { 
+    name: "Shruti Kharbanda", 
+    subject: "Business Studies", 
+    exp: "18 Years", 
+    tag: "B.St Coach",
+    desc: "Makes Business Studies practical, easy to understand, and strongly connected to exam success.",
+    img: shrutiImg
   }
 ];
 
 const FacultiesSection = () => {
+  const mobileTrackRef = useRef(null);
+  const [activeFaculty, setActiveFaculty] = useState(0);
+
+  useEffect(() => {
+    const track = mobileTrackRef.current;
+    if (!track) return undefined;
+
+    const updateActiveFaculty = () => {
+      const cards = Array.from(track.children);
+      if (!cards.length) return;
+
+      const trackLeft = track.getBoundingClientRect().left;
+      let closestIndex = 0;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      cards.forEach((card, index) => {
+        const distance = Math.abs(card.getBoundingClientRect().left - trackLeft);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActiveFaculty(closestIndex);
+    };
+
+    const goToFaculty = (index) => {
+      const cards = track.children;
+      const targetCard = cards[index];
+      if (!targetCard) return;
+
+      track.scrollTo({
+        left: targetCard.offsetLeft,
+        behavior: 'smooth',
+      });
+    };
+
+    updateActiveFaculty();
+    track.addEventListener('scroll', updateActiveFaculty, { passive: true });
+
+    const intervalId = window.setInterval(() => {
+      if (!window.matchMedia('(max-width: 767px)').matches) return;
+
+      setActiveFaculty((current) => {
+        const nextIndex = (current + 1) % faculties.length;
+        goToFaculty(nextIndex);
+        return nextIndex;
+      });
+    }, 3200);
+
+    return () => {
+      track.removeEventListener('scroll', updateActiveFaculty);
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
   return (
     <section id="faculties" className="bg-white py-12 border-b border-gray-100 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,11 +145,14 @@ const FacultiesSection = () => {
             Subject experts who make concepts clearer, practice sharper, and exam preparation more disciplined.
           </p>
 
-          <div className="mt-5 flex gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div
+            ref={mobileTrackRef}
+            className="mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 pr-4 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
             {faculties.map((fac) => (
               <article
                 key={fac.name}
-                className="w-[82vw] max-w-[320px] shrink-0 overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_50px_-34px_rgba(15,23,42,0.8)]"
+                className="w-[82vw] max-w-[320px] shrink-0 snap-start overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_50px_-34px_rgba(15,23,42,0.8)]"
               >
                 <div className="relative h-52 bg-[linear-gradient(180deg,#eff8ff_0%,#f8fafc_100%)]">
                   <div className="absolute left-4 top-4 z-20 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-sky-800 shadow-sm">
@@ -111,6 +197,26 @@ const FacultiesSection = () => {
               </article>
             ))}
           </div>
+
+          <div className="mt-4 flex items-center justify-center gap-2">
+            {faculties.map((fac, index) => (
+              <button
+                key={fac.name}
+                type="button"
+                onClick={() => {
+                  setActiveFaculty(index);
+                  mobileTrackRef.current?.scrollTo({
+                    left: mobileTrackRef.current.children[index]?.offsetLeft || 0,
+                    behavior: 'smooth',
+                  });
+                }}
+                className={`h-2.5 rounded-full transition-all ${
+                  activeFaculty === index ? 'w-7 bg-slate-900' : 'w-2.5 bg-slate-300'
+                }`}
+                aria-label={`Show faculty ${fac.name}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Header Elements */}
@@ -126,7 +232,7 @@ const FacultiesSection = () => {
           </p>
         </div>
         
-        <div className="hidden grid-cols-1 md:grid md:grid-cols-3 gap-8">
+        <div className="hidden grid-cols-1 gap-8 md:grid md:grid-cols-2 xl:grid-cols-3">
           {faculties.map((fac, idx) => (
             <div
               key={idx}
