@@ -19,9 +19,7 @@ const getBaseURL = () => {
   return '/api';
 };
 
-export const API_BASE_URL = import.meta.env.PROD
-  ? getBaseURL()
-  : (import.meta.env.VITE_API_BASE_URL ? normalizeApiBaseURL(import.meta.env.VITE_API_BASE_URL) : 'https://mathspoint-yqnv.onrender.com/api');
+export const API_BASE_URL = getBaseURL();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
