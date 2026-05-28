@@ -34,6 +34,7 @@ const defaultOrigins = [
   'https://mathspoint-client.onrender.com',
   'https://mathspoint-app.onrender.com',
   'https://mathspoint.onrender.com',
+  'https://mathspoint-yqnv.onrender.com',
   'capacitor://localhost',
   'http://localhost',
   'https://localhost',
@@ -41,18 +42,46 @@ const defaultOrigins = [
 
 const effectiveOrigins = allowedOrigins.length === 0 ? defaultOrigins : [...new Set([...allowedOrigins, ...defaultOrigins])];
 
+const isAllowedOrigin = (origin) => {
+  if (!origin || effectiveOrigins.includes('*')) {
+    return true;
+  }
+
+  if (effectiveOrigins.includes(origin)) {
+    return true;
+  }
+
+  try {
+    const parsed = new URL(origin);
+    const hostname = parsed.hostname.toLowerCase();
+
+    // Mobile WebViews and live-reload builds can use varying localhost ports.
+    if (['localhost', '127.0.0.1'].includes(hostname)) {
+      return ['http:', 'https:'].includes(parsed.protocol);
+    }
+
+    if (parsed.protocol === 'capacitor:') {
+      return hostname === 'localhost';
+    }
+  } catch (_error) {
+    return false;
+  }
+
+  return false;
+};
+
 const corsOptions = {
   origin(origin, callback) {
     // Allow tools like Postman and same-origin server requests.
-    if (!origin || effectiveOrigins.includes('*')) {
+    if (!origin) {
       return callback(null, true);
     }
 
-    if (effectiveOrigins.includes(origin)) {
+    if (isAllowedOrigin(origin)) {
       return callback(null, true);
     }
 
-    // Check for wildcard matches or patterns if needed, but for now just check inclusion
+    console.warn(`CORS blocked origin: ${origin}`);
     return callback(null, false);
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
